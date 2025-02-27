@@ -1,34 +1,35 @@
-import { useState, useEffect } from 'react'
-import { generateCards, getCardData } from './data/cardsData'
-import './App.css'
+import { useState, useEffect } from 'react';
+import { getCardData } from './data/cardsData';
+import './App.css';
 
 function App() {
   return (
     <>
-    <CardGallery />
+      <CardGallery />
+      <img 
+        src="https://s4.anilist.co/file/anilistcdn/character/large/b17-IazKGogQwJ1p.png" 
+        alt="fvs" 
+      />
     </>
-  )
-  
+  );
 }
 
-function CardGallery() {
-  const [cardData, setCardData] = useState(null);
+export default function CardGallery() {
+  const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const numberOfCards = 20; // Adjust as needed
-    
+    const numberOfCards = 30;
+
     const fetchCards = async () => {
       try {
         setLoading(true);
         const result = await getCardData(numberOfCards);
-        console.log("API Response:", result); // Log the full response
-        setCardData(result);
-        setLoading(false);
+        setCards(result);
       } catch (err) {
-        console.error("Error fetching card data:", err);
         setError("Failed to load cards");
+      } finally {
         setLoading(false);
       }
     };
@@ -36,38 +37,27 @@ function CardGallery() {
     fetchCards();
   }, []);
 
-  if (loading) return <div>Loading cards data...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!cardData) return <div>No data available</div>;
-
-  // Extract the actual data structure
-  const images = cardData.query?.allimages || [];
-  console.log("hi there ", images);
+  console.log("finnaly ",cards[0])
   
   return (
     <div>
-      {images.length > 0 ? (
+      {loading && <p>Loading cards...</p>}
+      {error && <p>{error}</p>}
+      {cards.length > 0 ? (
         <>
-        <h1>hi</h1>
-        <img 
-          src={images[4]?.url} 
-          alt="awedi" 
-        />
-</>
+          <h1>Card Gallery</h1>
+          <div className="card-gallery">
+            {cards.map((card, index) => (
+              <div key={index} className="card">
+                <img src={card.image_url} alt={card.name} height={"300px"}/>
+                <p>{card.name}</p>
+              </div>
+            ))}
+          </div>
+        </>
       ) : (
-        <div>No images available</div>
+        !loading && <div>No cards available</div>
       )}
     </div>
   );
-};
-
-function Display(){
-  let fdata
-  const data = generateCards(13)
-  console.log("hi thre",data) 
-  return (
-    <img src={data[4].src} alt="" />
-  )
 }
-
-export default App
