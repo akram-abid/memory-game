@@ -49,7 +49,7 @@ export default function CardGallery() {
           <div className="card-gallery">
             {cards.map((card, index) => (
               <div key={index} className="card">
-                <img src={card.image_url} alt={card.name} height={"300px"}/>
+                <img src={card.url} alt={card.name} height={"300px"}/>
                 <p>{card.name}</p>
               </div>
             ))}
