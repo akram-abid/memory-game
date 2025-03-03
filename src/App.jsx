@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef} from 'react';
 import { getCardData } from './data/cardsData';
 import './App.css';
 
@@ -52,47 +52,85 @@ function GameCore({ cards, numberOfCards }) {
 function CardsPlay({ cards }) {
   const [styleCard, setStyleCard] = useState({ width: "inherit" });
   const [styleBack, setStyleBack] = useState({ width: "inherit" });
-  const cardsOrder = [1, 2, 3, 4, 5, 6]
-
+  const [shuffledCards, setShuffledCards] = useState([...cards]);
+  const [isAnimating, setIsAnimating] = useState(false);
+  
+  // Function to shuffle an array
+  const shuffleArray = (arr) => {
+    return [...arr]
+      .map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+  };
+  
   const handleCardClick = () => {
+    if (isAnimating) return; // Prevent multiple clicks during animation
+    
+    setIsAnimating(true);
+    console.log("Starting card flip animation...");
+    
+    // First animation: flip cards to back
     setStyleCard({
       ...styleCard,
       willChange: "transform",
-      animation:
-        "flipCard 0.4s forwards, changeToBack 0.4s forwards, flipCardBack 0.4s 0.7s forwards, changeToBackBack 0.4s 0.7s forwards",
+      animation: "flipCard 0.4s forwards, changeToBack 0.4s forwards",
     });
+    
     setStyleBack({
       ...styleBack,
-      animation:
-        "flipCard 0.4s forwards, flipCardBack 0.4s 0.7s forwards, changeToFrontBack 0.4s 0.7s forwards",
+      animation: "flipCard 0.4s forwards",
       willChange: "transform",
     });
+    
+    // Shuffle the cards when they're face down (after the first flip)
+    setTimeout(() => {
+      console.log("Cards are face down, shuffling now...");
+      setShuffledCards(shuffleArray([...shuffledCards]));
+      
+      // Second animation: flip cards back to front
+      setStyleCard({
+        ...styleCard,
+        willChange: "transform",
+        animation: "flipCardBack 0.4s forwards, changeToBackBack 0.4s forwards",
+      });
+      
+      setStyleBack({
+        ...styleBack,
+        animation: "flipCardBack 0.4s forwards, changeToFrontBack 0.4s forwards",
+        willChange: "transform",
+      });
+    }, 650);
+    
+    // Reset animations after everything completes
     setTimeout(() => {
       setStyleCard({ width: "inherit" });
       setStyleBack({ width: "inherit" });
-    }, 1400);
+      setIsAnimating(false);
+    }, 1000); // Total animation time (0.4s + 0.4s)
   };
 
   return (
     <div className="cards">
-      {cards.map((value, index) => (
-        <div className="card" key={index} onClick={handleCardClick}>
+      {shuffledCards.map((card, index) => (
+        <div 
+          className="card" 
+          key={card.id || `card-${index}`} 
+          onClick={handleCardClick}
+        >
           <img
             src="../public/dal6wsb-fc4aaba4-d6ff-4029-a83f-9b518abd511d.png"
             alt="Back of card"
             className="back-side"
             style={styleBack}
           />
-          <img src={value.url} alt="Card" className="card-image" style={styleCard} />
+          <img 
+            src={card.url} 
+            alt="Card" 
+            className="card-image" 
+            style={styleCard} 
+          />
         </div>
       ))}
     </div>
   );
-}
-
-function shuffleArray(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]]; 
-  }
 }
