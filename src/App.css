@@ -1,43 +1,161 @@
-  #root {
-  width: 100vw;
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+#root {
+    width: 100vw;
     height: 100vh;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+    margin: 0 auto;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-image: url("../public/hieroglyphs-bg.png");
+    gap: 22px;
+}
+
+.header {
+    display: flex;
+    justify-self: flex-start;
+    width: 100vw;
+    height: 60px;
+    position: relative;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.616);
+    padding: 6px 20px;
+}
+
+.back {
+    background-color: rgb(206, 19, 19);
+    height: 40px;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+    position: absolute;
+    width: 200px;
+    left: calc(43vw);
+    top: 8px;
+    transition: filter 0.28s ease-out;
+    will-change: filter;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+    filter: drop-shadow(0 0 1.2em #d1272796);
+    transition: filter 0.35s ease-in;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes flipCard {
+    0% {
+        transform: scaleX(1);
+        transform-origin: center;
+        transform: perspective(600px) rotateY(30deg);
+    }
+    50% {
+        transform: perspective(600px) rotateY(90deg);
+    }
+    100% {
+        transform: perspective(600px) rotateY(180deg);
+    }
+}
+
+
+@keyframes flipCardBack {
+    0% {
+        transform: perspective(600px) rotateY(-180deg);
+    }
+    50% {
+        transform: perspective(600px) rotateY(-90deg);
+    }
+    100% {
+        transform: perspective(600px) rotateY(0deg);
+    }
+}
+
+@keyframes changeToBack {
+    0% {
+        position: absolute;
+        visibility: visible;
+    }
+
+    50% {
+        position: absolute;
+        visibility: hidden;
+    }
+
+    100% {
+        position: absolute;
+        visibility: hidden;;
+    }
+}
+
+@keyframes changeToBackBack {
+    0% {
+        position: absolute;
+        visibility: hidden;
+    }
+    50% {
+        position: absolute;
+        visibility: hidden;
+    }
+
+    100% {
+        position: absolute;
+        visibility: visible;
+    }
+}
+
+@keyframes changeToFrontBack {
+    0% {
+        position: absolute;
+        visibility: visible;
+    }
+    50% {
+        position: absolute;
+        visibility: hidden;
+    }
+
+    100% {
+        position: absolute;
+        visibility: hidden;
+    }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+    a:nth-of-type(2) .logo {
+        animation: logo-spin infinite 20s linear;
+    }
+}
+
+.game-container {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.cards {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 150px);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 16px 24px;
+    perspective: 1000px;
 }
 
 .card {
-  padding: 2em;
+    position: relative;
+    width: 150px;
+    will-change: transform;
 }
 
-.read-the-docs {
-  color: #888;
+.card-image {
+    position: absolute;
+}
+
+.back-side {
+    position: absolute;
 }
