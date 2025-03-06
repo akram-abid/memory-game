@@ -18,7 +18,6 @@ export async function getCardData(count = 15) {
                 name: card.name,
                 url: card.card_images[0].image_url // Get the first image URL
             }));
-            console.log("hi threr those are your dataa ", retrivedData)
             return retrivedData
 
         } else {
