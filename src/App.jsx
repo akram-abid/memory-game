@@ -147,8 +147,8 @@ function CardsPlay({ cards, highScore, setHighScore, score, setScore}) {
     const mouseX = event.clientX - rect.left; 
     const mouseY = event.clientY - rect.top;
     
-    const rotateY = ((mouseX - centerX) / centerX) * 15; 
-    const rotateX = -((mouseY - centerY) / centerY) * 15;
+    const rotateY = ((mouseX - centerX) / centerX) * 10; 
+    const rotateX = -((mouseY - centerY) / centerY) * 10;
     
     setHoverStyles({
       transform: `perspective(600px) rotateY(${-rotateY}deg) rotateX(${-rotateX}deg)`,
